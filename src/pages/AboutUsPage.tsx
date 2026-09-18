@@ -53,9 +53,9 @@ export const AboutUsPage: React.FC<AboutUsPageProps> = ({ currentLang, onOpenBoo
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-20">
         {/* Hero Banner */}
         <div className="relative rounded-3xl bg-gradient-to-br from-slate-900 via-[#0d1527] to-slate-950 border border-slate-800 p-8 sm:p-14 overflow-hidden text-center shadow-2xl">
-          {/* Ambient lighting */}
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+          {/* Ambient lighting - desktop only */}
+          <div className="hidden md:block absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="hidden md:block absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-semibold mb-6">

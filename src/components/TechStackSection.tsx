@@ -104,9 +104,9 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({ currentLang,
 
   return (
     <section id="technologies" className="py-24 bg-[#080c14] relative overflow-hidden border-t border-slate-800/80">
-      {/* Background decorations */}
-      <div className="absolute top-1/2 -right-40 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute -bottom-20 -left-40 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      {/* Background decorations - desktop only */}
+      <div className="hidden md:block absolute top-1/2 -right-40 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="hidden md:block absolute -bottom-20 -left-40 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         {/* Section Header */}

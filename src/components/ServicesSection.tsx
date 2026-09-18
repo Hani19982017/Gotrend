@@ -78,7 +78,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ currentLang, o
             return (
               <div
                 key={service.id}
-                className="glass-panel glass-panel-hover overflow-hidden rounded-3xl relative flex flex-col justify-between group border border-slate-800/80 hover:border-cyan-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_35px_rgba(6,182,212,0.15)]"
+                className="glass-panel glass-panel-hover overflow-hidden rounded-3xl relative flex flex-col justify-between group border border-slate-800/80 md:hover:border-cyan-500/50 transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-[0_12px_35px_rgba(6,182,212,0.15)]"
               >
                 <div>
                   {/* Service Visual Image */}
@@ -89,20 +89,21 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ currentLang, o
                         alt={service.title}
                         referrerPolicy="no-referrer"
                         loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        decoding="async"
+                        className="w-full h-full object-cover transition-transform duration-500 md:group-hover:scale-105"
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-slate-900 to-slate-800" />
                     )}
                     {/* Dark gradient overlay for smooth visual depth and readable text */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1220] via-slate-950/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1220] via-slate-950/40 to-transparent pointer-events-none" />
 
                     {/* Top Floating Badge & Icon */}
                     <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
-                      <div className={`p-2.5 rounded-xl bg-gradient-to-br ${gradient} text-white shadow-lg backdrop-blur-md`}>
+                      <div className={`p-2.5 rounded-xl bg-gradient-to-br ${gradient} text-white shadow-lg`}>
                         <Icon className="w-5 h-5" />
                       </div>
-                      <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-slate-950/85 text-cyan-300 border border-slate-700/80 backdrop-blur-md shadow-md">
+                      <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-slate-950/95 text-cyan-300 border border-slate-700/80 shadow-md">
                         {service.tag}
                       </span>
                     </div>

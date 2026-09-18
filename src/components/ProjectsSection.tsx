@@ -30,6 +30,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ currentLang, o
   const t = translations[currentLang];
   const data = t.projectsSection;
   const [activeModalProjectId, setActiveModalProjectId] = useState<string | null>(null);
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
   const getProjectIcon = (id: string) => {
     switch (id) {
@@ -58,9 +59,9 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ currentLang, o
 
   return (
     <section id="projects" className="py-24 bg-[#070b12] relative overflow-hidden border-t border-slate-800/80">
-      {/* Background glow effects */}
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Background glow effects - Desktop only to save mobile GPU memory */}
+      <div className="hidden md:block absolute top-1/4 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="hidden md:block absolute bottom-1/4 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         {/* Section Header */}
@@ -86,32 +87,38 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ currentLang, o
             return (
               <div
                 key={project.id}
-                className={`rounded-3xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800/90 hover:border-cyan-500/50 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_12px_35px_rgba(6,182,212,0.15)] group ${
+                className={`rounded-3xl bg-[#0b101b] border border-slate-800/90 md:hover:border-cyan-500/50 overflow-hidden flex flex-col justify-between transition-all duration-300 md:hover:-translate-y-1.5 md:hover:shadow-[0_12px_35px_rgba(6,182,212,0.15)] group ${
                   idx === 0 ? 'md:col-span-2 lg:col-span-1' : ''
                 }`}
               >
                 <div>
                   {/* Project Showcase Image */}
                   <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-slate-900">
-                    {projectImg ? (
+                    {projectImg && !failedImages[project.id] ? (
                       <img
                         src={projectImg}
                         alt={project.title}
                         referrerPolicy="no-referrer"
                         loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        decoding="async"
+                        onError={() => setFailedImages(prev => ({ ...prev, [project.id]: true }))}
+                        className="w-full h-full object-cover transition-transform duration-500 md:group-hover:scale-105"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-slate-900 to-slate-800" />
+                      <div className="w-full h-full bg-gradient-to-br from-slate-900 to-[#0c1626] flex items-center justify-center">
+                        <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/60 text-center">
+                          {getProjectIcon(project.id)}
+                        </div>
+                      </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1220] via-slate-950/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1220] via-slate-950/40 to-transparent pointer-events-none" />
 
-                    {/* Top Overlay Badge & Icon */}
+                    {/* Top Overlay Badge & Icon - Opaque without expensive GPU backdrop-blur */}
                     <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
-                      <div className="p-2.5 rounded-xl bg-slate-950/85 border border-slate-700/80 backdrop-blur-md shadow-lg">
+                      <div className="p-2.5 rounded-xl bg-[#090e17]/95 border border-slate-700/80 shadow-lg">
                         {getProjectIcon(project.id)}
                       </div>
-                      <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-950/85 border border-cyan-500/30 text-cyan-300 backdrop-blur-md shadow-md">
+                      <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-[#090e17]/95 border border-cyan-500/30 text-cyan-300 shadow-md">
                         {project.badge}
                       </span>
                     </div>
@@ -225,8 +232,8 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ currentLang, o
 
       {/* Interactive Showcase Modal for Demo/SaaS Projects */}
       {selectedModalProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl bg-gradient-to-b from-slate-900 to-[#0c1322] border border-slate-700/80 rounded-3xl overflow-hidden shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 animate-in fade-in duration-200">
+          <div className="relative w-full max-w-2xl bg-[#0c1322] border border-slate-700/80 rounded-3xl overflow-hidden shadow-2xl">
             {/* Header with image banner */}
             <div className="relative h-44 sm:h-52 w-full overflow-hidden bg-slate-950">
               {projectImages[selectedModalProject.id] && (
@@ -234,6 +241,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ currentLang, o
                   src={projectImages[selectedModalProject.id]}
                   alt={selectedModalProject.title}
                   referrerPolicy="no-referrer"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               )}

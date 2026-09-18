@@ -69,9 +69,9 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ currentLang, onOpenB
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-24">
         {/* Page Hero Header */}
         <div className="relative rounded-3xl bg-gradient-to-br from-slate-900 via-[#0a1222] to-slate-950 border border-slate-800 p-8 sm:p-14 overflow-hidden text-center shadow-2xl">
-          {/* Ambient Lighting */}
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+          {/* Ambient Lighting - desktop only */}
+          <div className="hidden md:block absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="hidden md:block absolute -bottom-24 -left-24 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-semibold mb-6">
@@ -145,24 +145,25 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ currentLang, onOpenB
                           alt={service.title}
                           referrerPolicy="no-referrer"
                           loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          decoding="async"
+                          className="w-full h-full object-cover transition-transform duration-500 md:group-hover:scale-105"
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-slate-900 to-slate-800" />
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1120] via-slate-950/40 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1120] via-slate-950/40 to-transparent pointer-events-none" />
 
                       {/* Top Overlay Badge & Icon */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
-                        <div className="p-2.5 rounded-xl bg-slate-950/85 border border-slate-700/80 backdrop-blur-md shadow-lg text-cyan-400">
+                        <div className="p-2.5 rounded-xl bg-slate-950/95 border border-slate-700/80 shadow-lg text-cyan-400">
                           {getServiceIcon(service.id)}
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-950/85 text-slate-200 border border-slate-700/80 backdrop-blur-md shadow-md">
+                          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-950/95 text-slate-200 border border-slate-700/80 shadow-md">
                             {service.tag}
                           </span>
                           {service.status && (
-                            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 border border-amber-500/40 text-amber-300 backdrop-blur-md shadow-md">
+                            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 border border-amber-500/40 text-amber-300 shadow-md">
                               {service.status}
                             </span>
                           )}

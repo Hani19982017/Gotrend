@@ -164,8 +164,8 @@ END:VCALENDAR`;
 
   return (
     <section id="booking" className="py-24 bg-[#070b13] relative overflow-hidden border-t border-slate-800">
-      {/* Background glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[550px] h-[550px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none"></div>
+      {/* Background glow - desktop only */}
+      <div className="hidden md:block absolute top-1/3 left-1/2 -translate-x-1/2 w-[550px] h-[550px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none"></div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-8">
         {/* Section Header */}

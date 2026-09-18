@@ -15,9 +15,9 @@ export const Hero: React.FC<HeroProps> = ({ currentLang, onOpenBooking }) => {
 
   return (
     <section className="relative overflow-hidden pt-12 pb-20 md:pt-16 md:pb-28 bg-tech-radial bg-tech-grid">
-      {/* Ambient background glowing orbs */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
-      <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+      {/* Ambient background glowing orbs - desktop only */}
+      <div className="hidden md:block absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+      <div className="hidden md:block absolute top-1/3 right-10 w-[400px] h-[400px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         {/* Top Trust & Certification Pill */}
