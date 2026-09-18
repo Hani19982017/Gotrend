@@ -93,15 +93,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange, o
 
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-[#080c14]/90 border-b border-slate-800/80 transition-all duration-300">
-      {/* Top Info Bar - Always side-by-side on mobile and desktop without stacking */}
-      <div className="bg-[#05080f] text-slate-300 text-xs border-b border-slate-800/60 py-1.5 px-3 sm:px-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 overflow-x-auto scrollbar-none whitespace-nowrap">
+      {/* Top Info Bar - Always visible, compact on mobile so all 3 languages (AR / EN / DE) are 100% visible */}
+      <div className="bg-[#05080f] text-slate-300 text-xs border-b border-slate-800/60 py-1.5 px-2.5 sm:px-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-4">
           {/* Contact Details (City, Phone, Email) */}
-          <div className="flex items-center gap-2.5 sm:gap-5 shrink-0 text-[11px] sm:text-xs">
+          <div className="flex items-center gap-2 sm:gap-4 shrink min-w-0 text-[11px] sm:text-xs truncate">
             {/* Location (City on mobile, full address on desktop) */}
             <div className="flex items-center gap-1 text-slate-300 hover:text-cyan-400 transition-colors shrink-0">
               <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-cyan-400 shrink-0" />
-              <span>{city}</span>
+              <span className="truncate max-w-[100px] xs:max-w-none">{city}</span>
               {streetAddress && (
                 <span className="hidden md:inline text-slate-400 font-normal">
                   {streetAddress}
@@ -109,10 +109,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange, o
               )}
             </div>
 
-            {/* Direct Phone Number */}
+            {/* Direct Phone Number (Hidden on very narrow mobile screens to guarantee languages are visible, or compact icon+num) */}
             <a
               href="tel:+4915783457397"
-              className="flex items-center gap-1 text-slate-300 hover:text-emerald-400 transition-colors shrink-0 font-medium"
+              className="hidden xs:flex items-center gap-1 text-slate-300 hover:text-emerald-400 transition-colors shrink-0 font-medium"
             >
               <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400 shrink-0" />
               <span dir="ltr">{t.topBar.phone}</span>
@@ -134,45 +134,54 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange, o
             </div>
           </div>
 
-          {/* Language Switcher Buttons - Sleek & side-by-side */}
+          {/* Language Switcher Buttons - All 3 languages explicitly visible and never truncated */}
           <div
-            className="flex items-center gap-1 bg-slate-900/95 border border-slate-800 rounded-full px-1.5 sm:px-2 py-0.5 shrink-0"
+            className="flex items-center gap-0.5 sm:gap-1 bg-slate-900/95 border border-slate-800/90 rounded-full px-1.5 sm:px-2 py-0.5 shrink-0 select-none shadow-sm"
             dir="ltr"
           >
-            <Globe className="w-3 h-3 text-cyan-400 shrink-0 ml-0.5" />
+            <Globe className="w-3 h-3 text-cyan-400 shrink-0 ml-0.5 hidden xs:block" />
+            
+            {/* Arabic */}
             <button
               id="lang-btn-ar"
               onClick={() => onLanguageChange('ar')}
-              className={`px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs rounded-full font-medium transition-all ${
+              className={`px-1.5 py-0.5 text-[10.5px] sm:text-xs rounded-full font-semibold transition-all cursor-pointer ${
                 currentLang === 'ar'
-                  ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(6,182,212,0.5)]'
+                  ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(6,182,212,0.4)]'
                   : 'text-slate-400 hover:text-white'
               }`}
+              title="العربية"
             >
               العربية
             </button>
-            <span className="text-slate-700 text-[10px]">|</span>
+            <span className="text-slate-700 text-[9px]">•</span>
+
+            {/* English */}
             <button
               id="lang-btn-en"
               onClick={() => onLanguageChange('en')}
-              className={`px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs rounded-full font-medium transition-all ${
+              className={`px-1.5 py-0.5 text-[10.5px] sm:text-xs rounded-full font-semibold transition-all cursor-pointer ${
                 currentLang === 'en'
-                  ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(6,182,212,0.5)]'
+                  ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(6,182,212,0.4)]'
                   : 'text-slate-400 hover:text-white'
               }`}
+              title="English"
             >
               <span className="sm:hidden">EN</span>
               <span className="hidden sm:inline">English</span>
             </button>
-            <span className="text-slate-700 text-[10px]">|</span>
+            <span className="text-slate-700 text-[9px]">•</span>
+
+            {/* German */}
             <button
               id="lang-btn-de"
               onClick={() => onLanguageChange('de')}
-              className={`px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs rounded-full font-medium transition-all ${
+              className={`px-1.5 py-0.5 text-[10.5px] sm:text-xs rounded-full font-semibold transition-all cursor-pointer ${
                 currentLang === 'de'
-                  ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(6,182,212,0.5)]'
+                  ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(6,182,212,0.4)]'
                   : 'text-slate-400 hover:text-white'
               }`}
+              title="Deutsch"
             >
               <span className="sm:hidden">DE</span>
               <span className="hidden sm:inline">Deutsch</span>
@@ -263,12 +272,61 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange, o
                 </a>
               );
             })}
+            {/* Mobile Drawer Language Selector */}
+            <div className="pt-2 pb-1 border-b border-slate-800/60">
+              <div className="text-xs font-semibold text-slate-400 mb-2 flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-cyan-400" />
+                <span>{currentLang === 'ar' ? 'اختر لغة الموقع' : currentLang === 'de' ? 'Sprache auswählen' : 'Select Language'}</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2" dir="ltr">
+                <button
+                  onClick={() => {
+                    onLanguageChange('ar');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`py-2 px-2 text-xs rounded-xl font-bold transition-all border ${
+                    currentLang === 'ar'
+                      ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 border-cyan-400 shadow-md shadow-cyan-500/20'
+                      : 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white'
+                  }`}
+                >
+                  العربية
+                </button>
+                <button
+                  onClick={() => {
+                    onLanguageChange('en');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`py-2 px-2 text-xs rounded-xl font-bold transition-all border ${
+                    currentLang === 'en'
+                      ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 border-cyan-400 shadow-md shadow-cyan-500/20'
+                      : 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white'
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => {
+                    onLanguageChange('de');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`py-2 px-2 text-xs rounded-xl font-bold transition-all border ${
+                    currentLang === 'de'
+                      ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 border-cyan-400 shadow-md shadow-cyan-500/20'
+                      : 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white'
+                  }`}
+                >
+                  Deutsch
+                </button>
+              </div>
+            </div>
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenBooking();
               }}
-              className="mt-3 flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-emerald-400 shadow-lg shadow-cyan-500/20"
+              className="mt-2 flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-emerald-400 shadow-lg shadow-cyan-500/20"
             >
               <Calendar className="w-4 h-4" />
               <span>{t.nav.bookNow}</span>
