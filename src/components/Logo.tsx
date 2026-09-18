@@ -19,15 +19,16 @@ export const Logo: React.FC<LogoProps> = ({ variant = 'inline', className = '', 
   if (variant === 'badge') {
     return (
       <div
-        className={`inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-900/90 border border-teal-500/30 shadow-[0_0_20px_rgba(20,184,166,0.2)] select-none ${className}`}
+        dir="ltr"
+        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/95 border border-teal-500/40 shadow-[0_0_20px_rgba(20,184,166,0.25)] select-none shrink-0 ${className}`}
       >
         <img
           src="/logo.png"
           alt="Go.Trend"
-          className="h-6 w-auto object-contain brightness-125 contrast-110 drop-shadow-[0_0_8px_rgba(45,212,191,0.4)]"
+          className="h-6 w-auto object-contain brightness-125 contrast-110 drop-shadow-[0_0_8px_rgba(45,212,191,0.4)] shrink-0"
           onError={() => setImageError(true)}
         />
-        <div className="flex items-baseline font-sans font-extrabold tracking-tight text-xs">
+        <div className="flex items-baseline font-sans font-extrabold tracking-tight text-xs whitespace-nowrap">
           <span className="text-white">Go.</span>
           <span className="text-teal-400 font-semibold ml-0.5">trend</span>
           <span className="text-slate-400 text-[10px] font-medium ml-1.5 border-l border-slate-700 pl-1.5">Germany</span>

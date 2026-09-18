@@ -90,102 +90,91 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
               boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(6, 182, 212, 0.15)',
             }}
           >
-            {/* Top Row: Close Icon, Title, and Go.trend Logo */}
-            <div className="flex items-center justify-between gap-4 mb-6">
-              {/* Close Button matching screenshot */}
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg text-slate-300 hover:text-white transition-colors cursor-pointer"
-                aria-label="Close"
-              >
-                <X className="w-6 h-6 stroke-[2.5]" />
-              </button>
-
-              {/* Title */}
-              <h2 className="text-xl sm:text-2xl font-bold text-white text-center flex-1">
-                {currentLang === 'de' ? 'Cookie-Einstellungen' : t.cookies.title}
-              </h2>
-
-              {/* Go.trend Pill Badge (Matches uploaded screenshot top right!) */}
-              <div className="shrink-0">
+            {/* Top Row: Go.trend Logo and Close Button (Logo is 100% fully visible and unclipped) */}
+            <div className="flex items-center justify-between gap-3 mb-5">
+              {/* Go.trend Official Logo Badge */}
+              <div className="shrink-0" dir="ltr">
                 <Logo variant="badge" size="sm" />
               </div>
+
+              {/* Close Button */}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 rounded-full bg-black/25 hover:bg-black/50 text-slate-300 hover:text-white transition-all cursor-pointer border border-white/10 hover:scale-105"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5 stroke-[2.5]" />
+              </button>
+            </div>
+
+            {/* Header Title with Cookie Icon */}
+            <div className="text-center mb-5">
+              <div className="inline-flex items-center justify-center p-2 rounded-xl bg-teal-500/15 text-teal-400 border border-teal-500/30 mb-2">
+                <Cookie className="w-5 h-5" />
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                {t.cookies.title}
+              </h2>
+              <p className="text-[11px] sm:text-xs text-teal-300/90 mt-1 font-medium">
+                {currentLang === 'ar'
+                  ? 'وفق معايير حماية البيانات والخصوصية الألمانية والأوروبية (DSGVO / GDPR)'
+                  : currentLang === 'de'
+                  ? 'Konform mit der europäischen DSGVO & deutschen Datenschutzstandards'
+                  : 'In compliance with German & EU GDPR Data Protection Standards'}
+              </p>
             </div>
 
             {!showPreferences ? (
               <>
-                {/* Main Body Text (in German or translated) */}
-                <div className="text-sm sm:text-base text-slate-100/95 leading-relaxed text-center mb-8 px-2">
-                  <p className="mb-2">
-                    .Wir verwenden Cookies, um unsere Website und unseren Service zu optimieren
-                  </p>
-                  <p className="mb-2">
-                    .Mit Ihrer Zustimmung verarbeiten wir Daten wie Surfverhalten oder eindeutige IDs
-                  </p>
-                  <p>
-                    .Ohne Zustimmung können bestimmte Funktionen beeinträchtigt sein
-                  </p>
-
-                  {/* If user switched to Arabic or English, show friendly translation below */}
-                  {currentLang !== 'de' && (
-                    <div className="mt-4 pt-3 border-t border-slate-300/20 text-xs text-cyan-200">
-                      {currentLang === 'ar' ? (
-                        <p>
-                          نستخدم ملفات تعريف الارتباط لتحسين موقعنا وخدماتنا. بموافقتك، نقوم بمعالجة بيانات التصفح والمعرفات الفريدة لتقديم أفضل تجربة وحجز مواعيد سلس.
-                        </p>
-                      ) : (
-                        <p>
-                          We use cookies to optimize our website and services. With your consent, we process browsing metrics to deliver the best user experience.
-                        </p>
-                      )}
-                    </div>
-                  )}
+                {/* Main Body Text */}
+                <div className="text-xs sm:text-sm text-slate-200 leading-relaxed text-center mb-6 px-1 sm:px-3">
+                  <p>{t.cookies.text}</p>
                 </div>
 
-                {/* 3 Buttons Row (Matches Screenshot: Einstellungen anzeigen | Ablehnen | Alle akzeptieren) */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-                  {/* View Settings / Einstellungen anzeigen */}
+                {/* 3 Buttons Row */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-5">
+                  {/* View Settings */}
                   <button
                     onClick={() => setShowPreferences(true)}
-                    className="w-full py-3 px-3 rounded-xl text-sm font-semibold bg-[#262626] hover:bg-[#333333] border border-cyan-400/80 text-white transition-all text-center flex items-center justify-center cursor-pointer shadow-sm"
+                    className="w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold bg-[#262626] hover:bg-[#333333] border border-cyan-400/70 text-white transition-all text-center flex items-center justify-center cursor-pointer shadow-sm active:scale-[0.98]"
                   >
-                    <span>{currentLang === 'de' ? 'Einstellungen anzeigen' : t.cookies.viewSettings}</span>
+                    <span>{t.cookies.viewSettings}</span>
                   </button>
 
-                  {/* Deny / Ablehnen */}
+                  {/* Deny */}
                   <button
                     onClick={handleDenyAll}
-                    className="w-full py-3 px-3 rounded-xl text-sm font-semibold bg-[#262626] hover:bg-[#333333] border border-cyan-400/80 text-white transition-all text-center flex items-center justify-center cursor-pointer shadow-sm"
+                    className="w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold bg-[#262626] hover:bg-[#333333] border border-slate-600 hover:border-slate-500 text-slate-200 transition-all text-center flex items-center justify-center cursor-pointer shadow-sm active:scale-[0.98]"
                   >
-                    <span>{currentLang === 'de' ? 'Ablehnen' : t.cookies.deny}</span>
+                    <span>{t.cookies.deny}</span>
                   </button>
 
-                  {/* Accept All / Alle akzeptieren */}
+                  {/* Accept All */}
                   <button
                     onClick={handleAcceptAll}
-                    className="w-full py-3 px-3 rounded-xl text-sm font-semibold bg-[#262626] hover:bg-[#333333] border-2 border-emerald-400 text-white transition-all text-center flex items-center justify-center cursor-pointer shadow-md"
+                    className="w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 text-slate-950 transition-all text-center flex items-center justify-center cursor-pointer shadow-md active:scale-[0.98]"
                   >
-                    <span>{currentLang === 'de' ? 'Alle akzeptieren' : t.cookies.acceptAll}</span>
+                    <span>{t.cookies.acceptAll}</span>
                   </button>
                 </div>
               </>
             ) : (
               /* Granular Settings View */
-              <div className="space-y-4 mb-6">
-                <div className="p-4 rounded-xl bg-[#262626] border border-slate-600 text-xs">
+              <div className="space-y-3 mb-5 text-start">
+                <div className="p-3.5 rounded-xl bg-[#262626] border border-slate-600 text-xs">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-white flex items-center gap-1.5">
                       <Shield className="w-4 h-4 text-emerald-400" />
                       {t.cookies.categories.essential.title}
                     </span>
-                    <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">
-                      Immer aktiv
+                    <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                      {currentLang === 'ar' ? 'نشط دائماً' : currentLang === 'de' ? 'Immer aktiv' : 'Always Active'}
                     </span>
                   </div>
                   <p className="text-slate-300">{t.cookies.categories.essential.desc}</p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#262626] border border-slate-600 text-xs">
+                <div className="p-3.5 rounded-xl bg-[#262626] border border-slate-600 text-xs">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-white flex items-center gap-1.5">
                       <Settings className="w-4 h-4 text-cyan-400" />
@@ -201,7 +190,7 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
                   <p className="text-slate-300">{t.cookies.categories.analytics.desc}</p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#262626] border border-slate-600 text-xs">
+                <div className="p-3.5 rounded-xl bg-[#262626] border border-slate-600 text-xs">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-white flex items-center gap-1.5">
                       <Cookie className="w-4 h-4 text-teal-400" />
@@ -220,13 +209,13 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
                 <div className="flex gap-2 pt-2">
                   <button
                     onClick={() => setShowPreferences(false)}
-                    className="flex-1 py-2.5 rounded-xl bg-[#333333] text-slate-200 text-xs font-semibold cursor-pointer"
+                    className="flex-1 py-2.5 rounded-xl bg-[#333333] hover:bg-[#444444] text-slate-200 text-xs font-semibold cursor-pointer transition-colors"
                   >
-                    Zurück
+                    {currentLang === 'ar' ? 'رجوع' : currentLang === 'de' ? 'Zurück' : 'Back'}
                   </button>
                   <button
                     onClick={handleSavePreferences}
-                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-slate-950 text-xs font-bold cursor-pointer"
+                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 text-slate-950 text-xs font-bold cursor-pointer transition-all shadow-md"
                   >
                     {t.cookies.savePreferences}
                   </button>
@@ -234,27 +223,27 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
               </div>
             )}
 
-            {/* Footer Legal Links (Matches screenshot: Impressum Datenschutz Cookie Policy) */}
-            <div className="flex items-center justify-center gap-4 text-xs font-medium text-emerald-400 pt-2 border-t border-slate-400/20">
+            {/* Footer Legal Links */}
+            <div className="flex items-center justify-center flex-wrap gap-3 sm:gap-4 text-xs font-medium text-emerald-400 pt-3 border-t border-slate-600/40">
               <button
                 onClick={onOpenImpressum}
                 className="hover:underline hover:text-emerald-300 transition-colors cursor-pointer"
               >
-                Impressum
+                {t.cookies.impressum}
               </button>
-              <span className="text-slate-400">•</span>
+              <span className="text-slate-500">•</span>
               <button
                 onClick={onOpenDatenschutz}
                 className="hover:underline hover:text-emerald-300 transition-colors cursor-pointer"
               >
-                Datenschutz
+                {t.cookies.privacy}
               </button>
-              <span className="text-slate-400">•</span>
+              <span className="text-slate-500">•</span>
               <button
                 onClick={onOpenCookiePolicy}
                 className="hover:underline hover:text-emerald-300 transition-colors cursor-pointer"
               >
-                Cookie Policy
+                {t.cookies.cookiePolicy}
               </button>
             </div>
           </div>
