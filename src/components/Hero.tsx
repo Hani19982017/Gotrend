@@ -1,7 +1,7 @@
 import React from 'react';
 import { Language } from '../types';
 import { translations } from '../data/content';
-import { Calendar, ArrowRight, ArrowLeft, ShieldCheck, CheckCircle2, TrendingUp, Award, Zap, Code2, Cloud } from 'lucide-react';
+import { Calendar, ArrowRight, ArrowLeft, CheckCircle2, Code2, Cloud } from 'lucide-react';
 
 interface HeroProps {
   currentLang: Language;
@@ -20,14 +20,6 @@ export const Hero: React.FC<HeroProps> = ({ currentLang, onOpenBooking }) => {
       <div className="hidden md:block absolute top-1/3 right-10 w-[400px] h-[400px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
-        {/* Top Trust & Certification Pill */}
-        <div className="flex justify-center mb-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-cyan-500/30 text-xs sm:text-sm text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.15)] animate-pulse">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span className="font-semibold">{t.hero.badge}</span>
-          </div>
-        </div>
-
         {/* Main Headline */}
         <div className="text-center max-w-4xl mx-auto mb-8">
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.2] text-white">
