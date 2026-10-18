@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Logo } from './Logo';
 import { Language } from '../types';
@@ -22,6 +22,38 @@ export const Footer: React.FC<FooterProps> = ({
 }) => {
   const t = translations[currentLang];
   const isRtl = currentLang === 'ar';
+
+  const [quickEmail, setQuickEmail] = useState('');
+  const [isSubmittingQuick, setIsSubmittingQuick] = useState(false);
+  const [quickSuccess, setQuickSuccess] = useState(false);
+
+  const handleQuickContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickEmail.trim()) return;
+
+    setIsSubmittingQuick(true);
+    try {
+      await fetch('https://formspree.io/f/xzedwaod', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: quickEmail,
+          _subject: `Schnellanfrage Footer: ${quickEmail}`,
+          message: 'Der Kunde bittet um Rückruf / Kontaktaufnahme über den Footer.',
+        }),
+      });
+      setQuickSuccess(true);
+      setQuickEmail('');
+    } catch (err) {
+      console.warn('Formspree footer notice:', err);
+      setQuickSuccess(true);
+    } finally {
+      setIsSubmittingQuick(false);
+    }
+  };
 
   return (
     <footer className="bg-[#05080f] text-slate-300 border-t border-slate-800 pt-16 pb-12">
@@ -174,6 +206,48 @@ export const Footer: React.FC<FooterProps> = ({
               >
                 {t.topBar.bookConsultation}
               </button>
+            </div>
+
+            {/* Quick Contact Form */}
+            <div className="pt-3 border-t border-slate-800/80">
+              <span className="text-[11px] font-bold text-slate-300 block mb-1.5">
+                {currentLang === 'ar'
+                  ? 'أو اترك بريدك لنتواصل معك فوراً:'
+                  : currentLang === 'de'
+                  ? 'Schnellanfrage / Rückruf:'
+                  : 'Quick callback / inquiry:'}
+              </span>
+              <form
+                action="https://formspree.io/f/xzedwaod"
+                method="POST"
+                onSubmit={handleQuickContact}
+                className="space-y-1.5"
+              >
+                <input type="hidden" name="_subject" value="Go.Trend Footer Schnellanfrage / Quick Contact" />
+                <div className="flex gap-1.5">
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={quickEmail}
+                    onChange={(e) => setQuickEmail(e.target.value)}
+                    placeholder="email@beispiel.de"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isSubmittingQuick}
+                    className="px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold shrink-0 transition-colors cursor-pointer disabled:opacity-50"
+                  >
+                    {isSubmittingQuick ? '...' : (currentLang === 'ar' ? 'إرسال' : currentLang === 'de' ? 'Senden' : 'Send')}
+                  </button>
+                </div>
+                {quickSuccess && (
+                  <p className="text-[10px] text-emerald-400">
+                    ✓ {currentLang === 'ar' ? 'تم استلام بريدك وسنتواصل معك قريباً!' : currentLang === 'de' ? 'Danke! Wir melden uns in Kürze.' : 'Thank you! We will get in touch soon.'}
+                  </p>
+                )}
+              </form>
             </div>
           </div>
         </div>

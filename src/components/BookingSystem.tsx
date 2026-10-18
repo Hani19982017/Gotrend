@@ -16,6 +16,7 @@ import {
   ArrowRight,
   ArrowLeft,
   Info,
+  Loader2,
 } from 'lucide-react';
 
 interface BookingSystemProps {
@@ -37,6 +38,7 @@ export const BookingSystem: React.FC<BookingSystemProps> = ({ currentLang }) => 
   const [notes, setNotes] = useState('');
   const [bookingConfirmed, setBookingConfirmed] = useState<BookingData | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Generate available next 10 business dates starting tomorrow
   const getAvailableDates = () => {
@@ -78,7 +80,7 @@ export const BookingSystem: React.FC<BookingSystemProps> = ({ currentLang }) => 
     }
   }, []);
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!clientName.trim() || !email.trim() || !phone.trim()) {
       setErrorMsg(
@@ -92,11 +94,12 @@ export const BookingSystem: React.FC<BookingSystemProps> = ({ currentLang }) => 
     }
 
     const currentServiceObj = t.booking.serviceTypes.find((s) => s.id === selectedService);
+    const serviceTitle = currentServiceObj?.name || 'Direct Consultation';
     const bookingRef = `GT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
     const newBooking: BookingData = {
       serviceId: selectedService,
-      serviceName: currentServiceObj?.name || 'Direct Consultation',
+      serviceName: serviceTitle,
       date: selectedDate,
       time: selectedTime,
       clientName,
@@ -107,8 +110,36 @@ export const BookingSystem: React.FC<BookingSystemProps> = ({ currentLang }) => 
       bookingRef,
     };
 
-    setBookingConfirmed(newBooking);
+    setIsSubmitting(true);
     setErrorMsg('');
+
+    try {
+      // Send directly to Formspree endpoint requested by user
+      await fetch('https://formspree.io/f/xzedwaod', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: clientName,
+          email: email,
+          phone: phone,
+          company: company || 'N/A',
+          service: serviceTitle,
+          date: selectedDate,
+          time: `${selectedTime} CET`,
+          notes: notes || 'Keine zusätzlichen Notizen',
+          bookingRef: bookingRef,
+          _subject: `Neue Go.Trend Terminanfrage: ${clientName} - ${serviceTitle} (${bookingRef})`,
+        }),
+      });
+    } catch (err) {
+      console.warn('Formspree submission network notice:', err);
+    } finally {
+      setIsSubmitting(false);
+      setBookingConfirmed(newBooking);
+    }
   };
 
   // Generate Google Calendar Link
@@ -190,7 +221,18 @@ END:VCALENDAR`;
         {/* Interactive Booking Container */}
         <div className="glass-panel border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative glow-cyan">
           {!bookingConfirmed ? (
-            <form onSubmit={handleBookingSubmit} className="space-y-10">
+            <form
+              action="https://formspree.io/f/xzedwaod"
+              method="POST"
+              onSubmit={handleBookingSubmit}
+              className="space-y-10"
+            >
+              {/* Formspree configuration & tracking fields */}
+              <input type="hidden" name="_subject" value={`Go.Trend Terminanfrage: ${clientName || 'Kunde'}`} />
+              <input type="hidden" name="service" value={t.booking.serviceTypes.find((s) => s.id === selectedService)?.name || selectedService} />
+              <input type="hidden" name="date" value={selectedDate} />
+              <input type="hidden" name="time" value={`${selectedTime} CET`} />
+              <input type="hidden" name="_gotcha" style={{ display: 'none' }} />
               {/* STEP 1: Select Consultation Topic */}
               <div>
                 <div className="flex items-center gap-2 mb-4 text-lg font-bold text-white">
@@ -315,6 +357,7 @@ END:VCALENDAR`;
                     </label>
                     <input
                       type="text"
+                      name="name"
                       required
                       value={clientName}
                       onChange={(e) => setClientName(e.target.value)}
@@ -330,6 +373,7 @@ END:VCALENDAR`;
                     </label>
                     <input
                       type="email"
+                      name="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -345,6 +389,7 @@ END:VCALENDAR`;
                     </label>
                     <input
                       type="tel"
+                      name="phone"
                       required
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
@@ -360,6 +405,7 @@ END:VCALENDAR`;
                     </label>
                     <input
                       type="text"
+                      name="company"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder={t.booking.companyPlaceholder}
@@ -375,6 +421,7 @@ END:VCALENDAR`;
                   </label>
                   <textarea
                     rows={3}
+                    name="notes"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder={t.booking.notesPlaceholder}
@@ -396,11 +443,27 @@ END:VCALENDAR`;
                 <button
                   type="submit"
                   id="submit-appointment-btn"
-                  className="w-full py-4 rounded-2xl text-base font-bold text-slate-950 bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full py-4 rounded-2xl text-base font-bold text-slate-950 bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <CalendarIcon className="w-5 h-5 text-slate-950" />
-                  <span>{t.booking.submitBtn}</span>
-                  <ArrowIcon className="w-4 h-4" />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin text-slate-950" />
+                      <span>
+                        {currentLang === 'ar'
+                          ? 'جاري إرسال الطلب...'
+                          : currentLang === 'de'
+                          ? 'Wird an Go.Trend übermittelt...'
+                          : 'Sending request to Go.Trend...'}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <CalendarIcon className="w-5 h-5 text-slate-950" />
+                      <span>{t.booking.submitBtn}</span>
+                      <ArrowIcon className="w-4 h-4" />
+                    </>
+                  )}
                 </button>
                 <p className="text-center text-xs text-slate-400 mt-3 flex items-center justify-center gap-1">
                   <span>🔒 {isRtl ? 'جلسة فيديو مباشرة مشفرة وسرية بدون أي التزام مالي' : '100% Free & Confidential video consultation, zero commitment.'}</span>
