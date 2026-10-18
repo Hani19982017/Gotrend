@@ -11,7 +11,17 @@ import { LegalModals } from './components/LegalModals';
 import { MessageCircle } from 'lucide-react';
 
 function AppContent() {
-  const [currentLang, setCurrentLang] = useState<Language>('ar');
+  const [currentLang, setCurrentLang] = useState<Language>(() => {
+    try {
+      const saved = localStorage.getItem('gotrend_lang') as Language | null;
+      if (saved && (saved === 'de' || saved === 'en' || saved === 'ar')) {
+        return saved;
+      }
+    } catch {
+      // fallback to German default
+    }
+    return 'de';
+  });
   const [activeLegalModal, setActiveLegalModal] = useState<'impressum' | 'datenschutz' | 'cookiePolicy' | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,6 +30,18 @@ function AppContent() {
   useEffect(() => {
     document.documentElement.lang = currentLang;
     document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+    try {
+      localStorage.setItem('gotrend_lang', currentLang);
+    } catch {
+      // ignore
+    }
+    if (currentLang === 'de') {
+      document.title = 'Go.Trend | Agentur für digitales Marketing & Cloud-Softwarelösungen in Deutschland';
+    } else if (currentLang === 'en') {
+      document.title = 'Go.Trend | Digital Marketing & Cloud Solutions Agency Germany';
+    } else {
+      document.title = 'Go.Trend | وكالة تسويق رقمي وبرمجة سحابية في ألمانيا';
+    }
   }, [currentLang]);
 
   const handleOpenBooking = () => {
